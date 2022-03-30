@@ -1,0 +1,16 @@
+{
+  "name": "pooltracker",
+  "version": "1.0.0",
+  "description": "this will keep track up uptime of nodes in the pool and total num of hashes to generate the pay allocation for ctc miners",
+  "main": "index.js",
+  "scripts": {
+    "main": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "thomas mcdonald",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3",
+    "request": "^2.88.2"
+  }
+}
