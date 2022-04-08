@@ -13,28 +13,31 @@ function collect_stats(){
     for(var user in config.users) {
         var nodes = config.users[user].nodes;
         for (var node in nodes){
-            node = config.users[user].nodes[node]
+            console.log(config.users[user].nodes[node].ip)
             options = {
-                uri: 'http://'+node.ip+':'+node.rpc_port,
+                uri: 'http://'+config.users[user].nodes[node].ip+':'+config.users[user].nodes[node].rpc_port,
                 method: 'POST',
                 json: {"id":1, "jsonrpc":"2.0", "method": "creditcoin_hashrate"}
             };
             request(options, function (error, response, body) {
-                if (!error && response.statusCode == 200) {
+                if (!error) {
                     var hashcount = parseInt(body.result.hash_count)
-                    if (node.curr_hashcount == null){
-                        node.curr_hashcount = hashcount
+                    if (config.users[user].nodes[node].curr_hashcount == null){
+                        config.users[user].nodes[node].curr_hashcount = hashcount
+                        console.log(hashcount)
                     }
                     else {
-                        node.prev_hashcount = node.curr_hashcount;
-                        node.curr_hashcount = parseInt(hashcount);
+                        config.users[user].nodes[node].prev_hashcount = config.users[user].nodes[node].curr_hashcount;
+                        config.users[user].nodes[node].curr_hashcount = parseInt(hashcount);
                         
-                        node.node_total_hashcount += node.curr_hashcount - node.prev_hashcount;
+                        config.users[user].nodes[node].node_total_hashcount += config.users[user].nodes[node].curr_hashcount - config.users[user].nodes[node].prev_hashcount;
+                        console.log('yays')
                     }
                 }
                 else {
-                    node.curr_hashcount = null
+                    config.users[user].nodes[node].curr_hashcount = null
                     console.log(error)
+                    console.log(response)
                 }
             }); 
         }
@@ -45,6 +48,10 @@ var stats_loop = setInterval(collect_stats, 1000);
 
 app.get('/stats', (req, res) => {
     res.send(config);
+});
+
+app.get('/', (req, res) => {
+    res.redirect('/pool');
 });
 
 app.get('/pool', (req, res) => {
