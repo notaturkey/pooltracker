@@ -2,11 +2,14 @@ const express = require('express');
 const app = express();
 const port = 50406;
 var config = require('./config');
+var cors = require("cors")
 
 const axios = require('axios').default
 
 var runtime = {
 }
+
+app.use(cors())
 
 function make_api_call(ip, port, user, name){
     if (runtime[user] == null){
@@ -61,7 +64,7 @@ async function collect_stats(){
 var stats_loop = setInterval(collect_stats, 1000);
 
 app.get('/stats', (req, res) => {
-    res.send(runtime);
+    res.json(runtime);
 });
 
 app.get('/', (req, res) => {
@@ -84,7 +87,7 @@ app.get('/pool', (req, res) => {
         payout[user]['percentage'] = (payout[user].num_hashes / payout['total_hashes']) * 100
     }
 
-    res.send(payout);
+    res.json(payout);
     
 });
 
