@@ -1,6 +1,3 @@
-
-
-
 how to start
 
 1. get config.js
