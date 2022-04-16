@@ -13,6 +13,7 @@ var runtime = {
 var lastAuthor;
 
 var minedblocks = []
+var allBlocks = []
 
 async function getChain() {
     const provider = new WsProvider('wss://mainnet.creditcoin.network');
@@ -42,15 +43,15 @@ async function getBlock() {
     const unsubscribe = await api.derive.chain.subscribeNewHeads((header) => {
         console.log(`Chain is at block: #${header.number} and was mined by ${header.author}`);
         lastAuthor=header.author
+        var minedblock = {
+                
+        }
+        minedblock[header.number] = header
         if (header.author == '5Dqn27bMY3zxpNWV4gHwoLAThTuGSMkegKPiFEJBNSWiBZMQ') {
             console.log('we mined a block!')
-
-            minedblock = {
-                
-            }
-            minedblock[header.number] = header
             minedblocks.push(minedblock)
         }
+        allBlocks.push(minedblock)
     });
 }
 getBlock()
@@ -123,6 +124,10 @@ app.get('/getChain', async (req, res) => {
 
 app.get('/getBlock', async (req, res) => {
     res.json(lastAuthor)
+});
+
+app.get('/getBlocks', async (req, res) => {
+    res.json(allBlocks.slice(-10))
 });
 
 app.get('/minedBlocks', (req, res) => {
