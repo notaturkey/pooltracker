@@ -14,6 +14,7 @@ export default function Home() {
       <ul>
         <li><a href='https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fmainnet.creditcoin.network#/explorer'>block explorer</a></li>
         <li><a href='https://telemetry.polkadot.io/#list/0xdd954cbf4000542ef1a15bca509cd89684330bee5e23766c527cdb0d7275e9c2'>telemetry</a></li>
+        <li><a href='https://github.com/notaturkey/pooltracker'>github</a></li>
       </ul>
       </Container>
     </Row>

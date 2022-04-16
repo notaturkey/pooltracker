@@ -39,7 +39,7 @@ function make_api_call(ip, port, user, name){
         if ( runtime[user]['nodes'][name]['prev']  > runtime[user]['nodes'][name]['curr'] || runtime[user]['nodes'][name]['prev'] == -1){
             runtime[user]['nodes'][name]['prev'] = runtime[user]['nodes'][name]['curr']
         }
-        
+
         runtime[user]['nodes'][name]['node_total'] += runtime[user]['nodes'][name]['curr'] - runtime[user]['nodes'][name]['prev']
         runtime[user]['nodes'][name]['prev'] = runtime[user]['nodes'][name]['curr']
 
@@ -57,7 +57,6 @@ async function collect_stats(){
             result = await make_api_call(config.users[user].nodes[node].ip, config.users[user].nodes[node].rpc_port, user ,config.users[user].nodes[node].name);
         }
     }
-    console.log(runtime['tom']['nodes'])
 }
 
 
