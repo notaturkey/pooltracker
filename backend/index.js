@@ -3,13 +3,59 @@ const app = express();
 const port = 3000;
 var config = require('./config');
 var cors = require("cors")
+var fetch = require('node-fetch')
+const { ApiPromise, WsProvider } = require('@polkadot/api');
 
 const axios = require('axios').default
 
 var runtime = {
 }
+var lastAuthor;
 
+var minedblocks = []
+
+async function getChain() {
+    const provider = new WsProvider('wss://mainnet.creditcoin.network');
+    const api = await ApiPromise.create({ provider });
+    const chainInfo = await api.registry.getChainProperties()
+    return chainInfo
+}
+
+async function getBalance() {
+    const provider = new WsProvider('wss://mainnet.creditcoin.network');
+    const api = await ApiPromise.create({ provider });
+    const ADDR = '5Dqn27bMY3zxpNWV4gHwoLAThTuGSMkegKPiFEJBNSWiBZMQ';
+
+    // Retrieve the last timestamp
+    const now = await api.query.timestamp.now();
+    
+    // Retrieve the account balance & nonce via the system module
+    const { nonce, data: balance } = await api.query.system.account(ADDR);
+    
+    return balance.free / 1000000000000000000
+}
+
+async function getBlock() {
+    const provider = new WsProvider('wss://mainnet.creditcoin.network');
+    const api = await ApiPromise.create({ provider });
+    let count = 0;
+    const unsubscribe = await api.derive.chain.subscribeNewHeads((header) => {
+        console.log(`Chain is at block: #${header.number} and was mined by ${header.author}`);
+        lastAuthor=header.author
+        if (header.author == '5Dqn27bMY3zxpNWV4gHwoLAThTuGSMkegKPiFEJBNSWiBZMQ') {
+            console.log('we mined a block!')
+
+            minedblock = {
+                
+            }
+            minedblock[header.number] = header
+            minedblocks.push(minedblock)
+        }
+    });
+}
+getBlock()
 app.use(cors())
+
 
 function make_api_call(ip, port, user, name){
     if (runtime[user] == null){
@@ -69,6 +115,24 @@ app.get('/stats', (req, res) => {
 app.get('/', (req, res) => {
     res.redirect('/pool');
 });
+
+app.get('/getChain', async (req, res) => {
+    response = await getChain()
+    res.json(response)
+});
+
+app.get('/getBlock', async (req, res) => {
+    res.json(lastAuthor)
+});
+
+app.get('/minedBlocks', (req, res) => {
+    res.json(minedblocks)
+})
+
+app.get('/balance', async (req, res) => {
+    response = await getBalance()
+    res.json(response)
+})
 
 app.get('/pool', (req, res) => {
     var payout = new Object()

@@ -10,6 +10,7 @@
   "author": "thomas mcdonald",
   "license": "ISC",
   "dependencies": {
+    "@polkadot/api": "^8.0.2",
     "axios": "^0.26.1",
     "cors": "^2.8.5",
     "express": "^4.17.3",
