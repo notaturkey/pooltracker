@@ -11,7 +11,7 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 
 export default function Profile() {
-    const { data, error } = useSWR(config.backendUrl, fetcher)
+    const { data, error } = useSWR(config.backendUrl+'/pool', fetcher)
     if (error) return <div>Failed to load</div>
     if (!data) return <Spinner animation="border" role="status"></Spinner>
     
