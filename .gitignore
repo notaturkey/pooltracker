@@ -1,3 +1,4 @@
 /backend/config.js
+/fe/pool-tracker-fe/pages/config.js
 /data/*
 docker-compose.yml
